@@ -1,17 +1,18 @@
 import pytest
 
-import scooter_api
 import urls
+from helpers import CreatePayload
+from scooter_api import ApiRequestPost
 
 
 @pytest.fixture(scope='function')
 def payload():
-    return scooter_api.create_payload()
+    return CreatePayload.create_payload()
 
 
 @pytest.fixture(scope='function')
 def create_courier(payload):
-    return scooter_api.api_request(urls.COURIER_REGISTRATION, payload)
+    return ApiRequestPost.api_request_post(urls.COURIER_REGISTRATION, payload)
 
 
 @pytest.fixture(scope='function')
@@ -20,4 +21,3 @@ def login_data(payload):
         "login": payload['login'],
         "password": payload['password']
     }
-
