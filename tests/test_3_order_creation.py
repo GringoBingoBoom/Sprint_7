@@ -1,6 +1,7 @@
 import allure
 import pytest
 import urls
+from data import ApiMessagesResponse
 from helpers import OrderDetails
 from scooter_api import ApiRequestPost, ApiRequestGet
 
@@ -12,8 +13,8 @@ class TestOrderCreationAndList:
     def test_success_order_creation(self, color):
         order_details = OrderDetails.create_order_details(color)
         order_request = ApiRequestPost.api_request_post(urls.ORDERS, order_details)
-        message = '"track":'
-        assert message in order_request['response.text'] and order_request['response.status_code'] == 201
+
+        assert ApiMessagesResponse.message_success_order_creation in order_request['response.text'] and order_request['response.status_code'] == 201
 
     @allure.title('3.2 Успешное получение списка заказов')
     def test_success_get_list_of_orders(self):
