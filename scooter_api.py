@@ -1,10 +1,12 @@
+import allure
 import requests
 import random
 import string
 import urls
 
 
-# метод регистрации нового курьера возвращает список из логина и пароля
+# метод запроса POST возвращает список из логина, пароля, кода ответа и текст
+@allure.step('API запрос POST по BASE_URL+api_url возвращает результат status_code и text')
 def api_request(api_url: str, payload: dict) -> dict:
     # отправляем запрос и сохраняем ответ в переменную response
     response = requests.post(urls.BASE_URL + api_url, json=payload)
@@ -20,12 +22,14 @@ def api_request(api_url: str, payload: dict) -> dict:
 
 
 # метод генерирует строку, состоящую только из букв нижнего регистра, в качестве параметра передаём длину строки
+@allure.step('Генерируем случайную символьную строку')
 def generate_random_string(length: int) -> str:
     letters = string.ascii_lowercase
     random_string = ''.join(random.choice(letters) for i in range(length))
     return random_string
 
 
+@allure.step('Создаем случайные данные login, password, firstName')
 def create_payload() -> dict:
     # генерируем логин, пароль и имя курьера
     login = generate_random_string(10)
@@ -40,7 +44,7 @@ def create_payload() -> dict:
 
     return payload
 
-
+@allure.step('Создаем случайные данные для нового заказа')
 def create_order_details(color: list = []) -> dict:
     order_details = {
         "firstName": generate_random_string(10),
@@ -55,7 +59,7 @@ def create_order_details(color: list = []) -> dict:
     }
     return order_details
 
-
+@allure.step('API запрос GET по BASE_URL+api_url возвращает результат status_code и text')
 def api_request_get(api_url: str) -> dict:
     # отправляем запрос на список заказов и сохраняем ответ в переменную response
     url_order_get = f'?limit={random.randint(3, 6)}&nearestStation=["{random.randint(1, 263)}"]'
